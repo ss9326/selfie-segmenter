@@ -9,8 +9,8 @@ const webcamPredictions = document.getElementById("webcamPredictions");
 const demosSection: HTMLElement = document.getElementById("demos");
 let enableWebcamButton: HTMLButtonElement;
 let webcamRunning: Boolean = false;
-const videoHeight: string = "360px";
-const videoWidth: string = "480px";
+const videoHeight: string = "480px";
+const videoWidth: string = "640px";
 let runningMode: "IMAGE" | "VIDEO" = "IMAGE";
 const resultWidthHeigth = 256;
 
