@@ -1,5 +1,5 @@
 import './style.css';
-import { ImageSegmenter, SegmentationMask, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.2";
+import {ImageSegmenter, ImageSegmenterResult, FilesetResolver,  } from '@mediapipe/tasks-vision';
 
 // Get DOM elements
 const video = document.getElementById("webcam") as HTMLVideoElement;
@@ -108,8 +108,9 @@ function callback(result: ImageSegmenterResult) {
   canvasClick.width = width;
   canvasClick.height = height;
   let category: String = "";
-  const mask: Number[] = result.categoryMask.getAsUint8Array();
-  for (let i in mask) {
+  const mask: Uint8Array = result.categoryMask.getAsUint8Array();
+  for (let j in mask) {
+    var i = Number(j)
     if (mask[i] > 0) {
       category = labels[mask[i]];
     }
@@ -122,9 +123,9 @@ function callback(result: ImageSegmenterResult) {
   const uint8Array = new Uint8ClampedArray(imageData.buffer);
   const dataNew = new ImageData(uint8Array, width, height);
   cxt.putImageData(dataNew, 0, 0);
-  const p: HTMLElement = event.target.parentNode.getElementsByClassName(
+  const p: HTMLElement = ((event.target as HTMLElement).parentNode as HTMLElement).getElementsByClassName(
     "classification"
-  )[0];
+  )[0] as HTMLElement;
   p.classList.remove("removed");
   p.innerText = "Category: " + category;
 }
@@ -136,7 +137,7 @@ function callbackForVideo(result: ImageSegmenterResult) {
     video.videoWidth,
     video.videoHeight
   ).data;
-  const mask: Number[] = result.categoryMask.getAsFloat32Array();
+  const mask: Float32Array = result.categoryMask.getAsFloat32Array();
   let j = 0;
   for (let i = 0; i < mask.length; ++i) {
     const maskVal = Math.round(mask[i] * 255.0);
