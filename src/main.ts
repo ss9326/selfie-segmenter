@@ -51,7 +51,7 @@ const createImageSegmenter = async () => {
     baseOptions: {
       modelAssetPath:
         "https://storage.googleapis.com/mediapipe-models/image_segmenter/deeplab_v3/float32/1/deeplab_v3.tflite",
-      delegate: "GPU"
+      delegate: "CPU"
     },
     runningMode: runningMode,
     outputCategoryMask: true,
