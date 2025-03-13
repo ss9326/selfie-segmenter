@@ -2,6 +2,7 @@ import './style.css';
 import {ImageSegmenter, ImageSegmenterResult, FilesetResolver,  } from '@mediapipe/tasks-vision';
 
 // Get DOM elements
+const infTimeDiv = document.getElementById("inf") as HTMLElement;
 const video = document.getElementById("webcam") as HTMLVideoElement;
 const canvasElement = document.getElementById("canvas") as HTMLCanvasElement;
 const canvasCtx = canvasElement.getContext("2d");
@@ -50,7 +51,7 @@ const createImageSegmenter = async () => {
     baseOptions: {
       modelAssetPath:
         "https://storage.googleapis.com/mediapipe-models/image_segmenter/deeplab_v3/float32/1/deeplab_v3.tflite",
-      delegate: "CPU"
+      delegate: "GPU"
     },
     runningMode: runningMode,
     outputCategoryMask: true,
@@ -131,6 +132,8 @@ function callback(result: ImageSegmenterResult) {
 }
 
 function callbackForVideo(result: ImageSegmenterResult) {
+  const infTime = (performance.now() - lastStartTime)
+  infTimeDiv.innerText = infTime + ""
   let imageData = canvasCtx.getImageData(
     0,
     0,
@@ -170,6 +173,7 @@ function hasGetUserMedia() {
 }
 
 // Get segmentation from the webcam
+let lastStartTime = -1;
 let lastWebcamTime = -1;
 async function predictWebcam() {
   if (video.currentTime === lastWebcamTime) {
@@ -192,7 +196,7 @@ async function predictWebcam() {
     });
   }
   let startTimeMs = performance.now();
-
+  lastStartTime = startTimeMs;
   // Start segmenting the stream.
   imageSegmenter.segmentForVideo(video, startTimeMs, callbackForVideo);
 }
