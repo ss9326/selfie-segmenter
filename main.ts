@@ -6,7 +6,6 @@ const infTimeDiv = document.getElementById("inf") as HTMLElement;
 const video = document.getElementById("webcam") as HTMLVideoElement;
 const canvasElement = document.getElementById("canvas") as HTMLCanvasElement;
 const canvasCtx = canvasElement.getContext("2d");
-const demosSection: HTMLElement = document.getElementById("demos");
 let webcamRunning: Boolean = false;
 const videoHeight: string = "480px";
 const videoWidth: string = "640px";
@@ -56,7 +55,6 @@ const createImageSegmenter = async () => {
     outputConfidenceMasks: false
   });
   labels = imageSegmenter.getLabels();
-  demosSection.classList.remove("invisible");
   enableCam()
 };
 createImageSegmenter();
