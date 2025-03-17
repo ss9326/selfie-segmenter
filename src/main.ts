@@ -6,9 +6,7 @@ const infTimeDiv = document.getElementById("inf") as HTMLElement;
 const video = document.getElementById("webcam") as HTMLVideoElement;
 const canvasElement = document.getElementById("canvas") as HTMLCanvasElement;
 const canvasCtx = canvasElement.getContext("2d");
-const webcamPredictions = document.getElementById("webcamPredictions");
 const demosSection: HTMLElement = document.getElementById("demos");
-let enableWebcamButton: HTMLButtonElement;
 let webcamRunning: Boolean = false;
 const videoHeight: string = "480px";
 const videoWidth: string = "640px";
@@ -51,7 +49,7 @@ const createImageSegmenter = async () => {
     baseOptions: {
       modelAssetPath:
         "https://storage.googleapis.com/mediapipe-models/image_segmenter/deeplab_v3/float32/1/deeplab_v3.tflite",
-      delegate: "CPU"
+      delegate: "GPU"
     },
     runningMode: runningMode,
     outputCategoryMask: true,
@@ -59,6 +57,7 @@ const createImageSegmenter = async () => {
   });
   labels = imageSegmenter.getLabels();
   demosSection.classList.remove("invisible");
+  enableCam()
 };
 createImageSegmenter();
 
@@ -202,18 +201,12 @@ async function predictWebcam() {
 }
 
 // Enable the live webcam view and start imageSegmentation.
-async function enableCam(event) {
-  if (imageSegmenter === undefined) {
+async function enableCam() {
+  if (imageSegmenter === undefined || webcamRunning) {
     return;
   }
 
-  if (webcamRunning === true) {
-    webcamRunning = false;
-    enableWebcamButton.innerText = "ENABLE SEGMENTATION";
-  } else {
-    webcamRunning = true;
-    enableWebcamButton.innerText = "DISABLE SEGMENTATION";
-  }
+  webcamRunning = true;
 
   // getUsermedia parameters.
   const constraints = {
@@ -227,10 +220,7 @@ async function enableCam(event) {
 
 // If webcam supported, add event listener to button.
 if (hasGetUserMedia()) {
-  enableWebcamButton = document.getElementById(
-    "webcamButton"
-  ) as HTMLButtonElement;
-  enableWebcamButton.addEventListener("click", enableCam);
+ enableCam()
 } else {
   console.warn("getUserMedia() is not supported by your browser");
 }
