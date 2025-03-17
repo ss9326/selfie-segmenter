@@ -108,6 +108,7 @@ async function predictWebcam() {
     if (webcamRunning === true) {
       window.requestAnimationFrame(predictWebcam);
     }
+    console.warn(">>>> SAME TIME!!")
     return;
   }
   lastWebcamTime = video.currentTime;
