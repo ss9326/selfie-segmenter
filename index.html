@@ -3,38 +3,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Vite TS App</title>
-    <script type="module" crossorigin src="/assets/index-CpU6OsOJ.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DYuDE8el.css">
+    <script type="module" crossorigin src="/selfie-segmenter/assets/index-CZym2vJj.js"></script>
+    <link rel="stylesheet" crossorigin href="/selfie-segmenter/assets/index-DYuDE8el.css">
   </head>
   <body>
-    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-    
-    <h1>Segmenting images using the MediaPipe Image Segmentation Task</h1>
-    
-    <section id="demos" class="invisible">
-      <div class="removed">
-        <h2>Demo: Segmenting Images</h2>
-        <p><b>Click on an image below</b> to see its Segmentation.</p>
-        <div class="segmentOnClick">
-          <canvas class="removed"></canvas>
-          <img src="https://assets.codepen.io/9177687/dog_flickr_publicdomain.jpeg" crossorigin="anonymous" title="Click to get segmentation!" />
-              <p class="classification removed">
-        </div>
-        <div class="segmentOnClick">
-          <canvas class="removed"></canvas>
-          <img src="https://assets.codepen.io/9177687/cat_flickr_publicdomain.jpeg" crossorigin="anonymous" title="Click to get segmentation!" />
-              <p class="classification removed">
-        </div>  
-      </div>    
-      <h2>Demo: Webcam continuous segmentation</h2>
-      <p>Hold some objects up close to your webcam to get real-time segmentation.</br>Click <b>enable webcam</b> below and grant access to the webcam if prompted.</p>
-    
+    <section id="demos"> 
       <div class="webcam">
-        <button id="webcamButton" class="mdc-button mdc-button--raised">
-          <span class="mdc-button__ripple"></span>
-          <span class="mdc-button__label">ENABLE WEBCAM</span>
-        </button>
         <div id="inf"></div>
         <video id="webcam" autoplay style="display: none;"></video>
         <canvas id="canvas" width="1280px" height="720px"></canvas>
