@@ -1,5 +1,6 @@
 {
   "name": "selfie-segmenter",
+  "homepage": "https://ss9326.github.io/selfie-segmenter/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
