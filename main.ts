@@ -95,7 +95,8 @@ async function predictWebcam() {
   }
   const startTimeMs = performance.now();
 
-  function callbackForVideo(result: ImageSegmenterResult) {
+  // Start segmenting the stream.
+  imageSegmenter.segmentForVideo(video, startTimeMs, (result: ImageSegmenterResult) => {  
     const infTime = (performance.now() - startTimeMs)
     infTimeDiv.innerText = infTime + ""
     let imageData = canvasCtx.getImageData(
@@ -125,10 +126,8 @@ async function predictWebcam() {
     if (webcamRunning === true) {
       window.requestAnimationFrame(predictWebcam);
     }
-  }
-
-  // Start segmenting the stream.
-  imageSegmenter.segmentForVideo(video, startTimeMs, callbackForVideo);
+      
+  });
 }
 
 // Enable the live webcam view and start imageSegmentation.
