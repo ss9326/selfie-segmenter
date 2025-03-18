@@ -93,7 +93,7 @@ async function predictWebcam() {
       runningMode: runningMode
     });
   }
-  let startTimeMs = performance.now();
+  const startTimeMs = performance.now();
 
   function callbackForVideo(result: ImageSegmenterResult) {
     const infTime = (performance.now() - startTimeMs)
