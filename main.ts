@@ -3,10 +3,12 @@ import {ImageSegmenter, ImageSegmenterResult, FilesetResolver,  } from '@mediapi
 
 // Get DOM elements
 const infTimeDiv = document.getElementById("inf") as HTMLElement;
+const delegateDiv = document.getElementById("delegate") as HTMLElement;
 const video = document.getElementById("webcam") as HTMLVideoElement;
 const canvasElement = document.getElementById("canvas") as HTMLCanvasElement;
 const canvasCtx = canvasElement.getContext("2d");
 let webcamRunning: Boolean = false;
+let curDelegate: "GPU" | "CPU" = "GPU"
 const videoHeight: string = "480px";
 const videoWidth: string = "640px";
 let runningMode: "IMAGE" | "VIDEO" = "IMAGE";
@@ -48,12 +50,13 @@ const createImageSegmenter = async () => {
     baseOptions: {
       modelAssetPath:
         "https://storage.googleapis.com/mediapipe-models/image_segmenter/deeplab_v3/float32/1/deeplab_v3.tflite",
-      delegate: "GPU"
+      delegate: curDelegate
     },
     runningMode: runningMode,
     outputCategoryMask: true,
     outputConfidenceMasks: false
   });
+  delegateDiv.innerText = "Running on: " + curDelegate
   labels = imageSegmenter.getLabels();
   enableCam()
 };
