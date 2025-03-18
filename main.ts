@@ -62,38 +62,6 @@ const createImageSegmenter = async () => {
 };
 createImageSegmenter();
 
-function callbackForVideo(result: ImageSegmenterResult) {
-  const infTime = (performance.now() - lastStartTime)
-  infTimeDiv.innerText = infTime + ""
-  let imageData = canvasCtx.getImageData(
-    0,
-    0,
-    video.videoWidth,
-    video.videoHeight
-  ).data;
-  const mask: Float32Array = result.categoryMask.getAsFloat32Array();
-  let j = 0;
-  for (let i = 0; i < mask.length; ++i) {
-    const maskVal = Math.round(mask[i] * 255.0);
-    const legendColor = legendColors[maskVal % legendColors.length];
-    imageData[j] = (legendColor[0] + imageData[j]) / 2;
-    imageData[j + 1] = (legendColor[1] + imageData[j + 1]) / 2;
-    imageData[j + 2] = (legendColor[2] + imageData[j + 2]) / 2;
-    imageData[j + 3] = (legendColor[3] + imageData[j + 3]) / 2;
-    j += 4;
-  }
-  const uint8Array = new Uint8ClampedArray(imageData.buffer);
-  const dataNew = new ImageData(
-    uint8Array,
-    video.videoWidth,
-    video.videoHeight
-  );
-  canvasCtx.putImageData(dataNew, 0, 0);
-  if (webcamRunning === true) {
-    window.requestAnimationFrame(predictWebcam);
-  }
-}
-
 /********************************************************************
 // Demo 2: Continuously grab image from webcam stream and segmented it.
 ********************************************************************/
@@ -104,7 +72,6 @@ function hasGetUserMedia() {
 }
 
 // Get segmentation from the webcam
-let lastStartTime = -1;
 let lastWebcamTime = -1;
 async function predictWebcam() {
   if (video.currentTime === lastWebcamTime) {
@@ -127,7 +94,39 @@ async function predictWebcam() {
     });
   }
   let startTimeMs = performance.now();
-  lastStartTime = startTimeMs;
+
+  function callbackForVideo(result: ImageSegmenterResult) {
+    const infTime = (performance.now() - startTimeMs)
+    infTimeDiv.innerText = infTime + ""
+    let imageData = canvasCtx.getImageData(
+      0,
+      0,
+      video.videoWidth,
+      video.videoHeight
+    ).data;
+    const mask: Float32Array = result.categoryMask.getAsFloat32Array();
+    let j = 0;
+    for (let i = 0; i < mask.length; ++i) {
+      const maskVal = Math.round(mask[i] * 255.0);
+      const legendColor = legendColors[maskVal % legendColors.length];
+      imageData[j] = (legendColor[0] + imageData[j]) / 2;
+      imageData[j + 1] = (legendColor[1] + imageData[j + 1]) / 2;
+      imageData[j + 2] = (legendColor[2] + imageData[j + 2]) / 2;
+      imageData[j + 3] = (legendColor[3] + imageData[j + 3]) / 2;
+      j += 4;
+    }
+    const uint8Array = new Uint8ClampedArray(imageData.buffer);
+    const dataNew = new ImageData(
+      uint8Array,
+      video.videoWidth,
+      video.videoHeight
+    );
+    canvasCtx.putImageData(dataNew, 0, 0);
+    if (webcamRunning === true) {
+      window.requestAnimationFrame(predictWebcam);
+    }
+  }
+
   // Start segmenting the stream.
   imageSegmenter.segmentForVideo(video, startTimeMs, callbackForVideo);
 }
